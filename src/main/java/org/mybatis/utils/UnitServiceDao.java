@@ -1,22 +1,19 @@
 package org.mybatis.utils;
 
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
 public interface UnitServiceDao {
     @UpdateProvider(type = UnitServiceDaoProvider.class, method = "update")
-    <T> void update(@Param("t") T t);
+    <T> void update(@Param("bean") T bean);
 
     @DeleteProvider(type = UnitServiceDaoProvider.class, method = "delete")
-    <T> void delete(@Param("t") T t);
+    <T> void delete(@Param("bean") T bean);
 
     @InsertProvider(type = UnitServiceDaoProvider.class, method = "insert")
-    <T> void insert(@Param("t") T t);
+    <T> void insert(@Param("bean") T bean);
 
     class UnitServiceDaoProvider {
         public String update(Map<String, Object> map) throws IllegalAccessException {
@@ -32,17 +29,18 @@ public interface UnitServiceDao {
         }
 
         private String buildSql(Map<String, Object> map, Operation operation) throws IllegalAccessException {
-            System.out.println("[Operation:]" + operation);
+            String bean = "bean";
+            System.out.println("[Operation]" + operation);
             StringBuilder stringCriterias = new StringBuilder();
             StringBuilder stringColumns = new StringBuilder();
             String keyCriteria = "";
-            String table = map.get("t").getClass().getSimpleName();
-            Object obj = map.get("t");
-            Class objClass = map.get("t").getClass();
+            String table = map.get(bean).getClass().getSimpleName();
+            Object obj = map.get(bean);
+            Class objClass = map.get(bean).getClass();
             String primaryKey = "";
-            TwoTuple<Boolean, String> tuplePrimaryKey = UnitServiceUtil.hasPrimaryKey(map.get("t"));
+            TwoTuple<Boolean, String> tuplePrimaryKey = DaoUtil.hasPrimaryKey(map.get(bean));
             if (tuplePrimaryKey.first) {
-                System.out.println("PrimaryKey is " + tuplePrimaryKey.second);
+                System.out.println("[PrimaryKey]" + tuplePrimaryKey.second);
                 primaryKey = tuplePrimaryKey.second;
             } else {
                 return String.format("%s找不到主键", table);
@@ -55,25 +53,27 @@ public interface UnitServiceDao {
                 f.setAccessible(true); //设置些属性是可以访问的
                 //Object val = f.get(obj);//得到此属性的值
                 //System.out.println("name:" + f.getName() + "\t value = " + val);
+
                 if (f.get(obj) != null) {
                     switch (operation) {
                         case UPDATE:
                             if (f.getName().equalsIgnoreCase(primaryKey)) {
-                                keyCriteria = UnitServiceUtil.buildCriteria(f, obj);
+                                keyCriteria = DaoUtil.buildCriteria(f, obj);
                             } else {
-                                stringCriterias.append(UnitServiceUtil.buildCriteria(f, obj) + ",");
+                                stringCriterias.append(DaoUtil.buildCriteria(f, obj) + ",");
                             }
                             break;
                         case DELETE:
                             if (f.getName().equalsIgnoreCase(primaryKey)) {
-                                keyCriteria = UnitServiceUtil.buildCriteria(f, obj);
+                                keyCriteria = DaoUtil.buildCriteria(f, obj);
                             } else {
-                                stringCriterias.append(UnitServiceUtil.buildCriteria(f, obj) + " AND ");
+                                stringCriterias.append(DaoUtil.buildCriteria(f, obj) + " AND ");
                             }
                             break;
                         case INSERT:
-                            stringColumns.append(UnitServiceUtil.getColumnName(f) + ",");
-                            stringCriterias.append(UnitServiceUtil.getColumnValue(f, obj) + ",");
+                            stringColumns.append(DaoUtil.getColumnName(f) + ",");
+                            stringCriterias.append(DaoUtil.getColumnValue(f, obj) + ",");
+                            break;
                     }
 
                 }
@@ -86,7 +86,7 @@ public interface UnitServiceDao {
                     if (stringCriterias.length() > 0) {
                         stringCriterias.deleteCharAt(stringCriterias.length() - 1);
                     }
-                    if(keyCriteria.isEmpty())
+                    if (keyCriteria.isEmpty())
                         return "主键必须赋值";
                     sql = String.format("%s %s SET %s WHERE %s;", operation.value(), table, stringCriterias.toString(), keyCriteria);
                     break;
@@ -95,7 +95,7 @@ public interface UnitServiceDao {
                         System.out.println("len:" + stringCriterias.length());
                         stringCriterias.delete(stringCriterias.length() - 4, stringCriterias.length());
                     }*/
-                    if(keyCriteria.isEmpty())
+                    if (keyCriteria.isEmpty())
                         return "主键必须赋值";
                     sql = String.format("%s FROM %s WHERE %s %s;", operation.value(), table, stringCriterias.toString(), keyCriteria);
                     break;
@@ -110,9 +110,9 @@ public interface UnitServiceDao {
                     break;
             }
 
-            System.out.println("[keyCriteria:]" + keyCriteria);
-            System.out.println("[stringCriterias:]" + stringCriterias.toString());
-            System.out.println("[sql:]" + sql + "\r\n");
+            System.out.println("[keyCriteria]" + keyCriteria);
+            System.out.println("[stringCriterias]" + stringCriterias.toString());
+            System.out.println("[sql]" + sql + "\r\n");
             return sql;
         }
     }

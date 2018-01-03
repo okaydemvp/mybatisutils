@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class UnitServiceUtil {
+public class DaoUtil {
     public static <T> TwoTuple<Boolean, String> hasPrimaryKey(T t) {
         Objects.requireNonNull(t);
         List<String> primaryKeys = new ArrayList<>();
@@ -19,15 +19,15 @@ public class UnitServiceUtil {
             }
         }
         if (primaryKeys.size() == 0) {
-            System.out.println("primaryKeys#size():" + primaryKeys.size());
+            System.out.println("[primaryKeys#size()]" + primaryKeys.size());
             return TupleUtil.tuple(false, "");
         } else {
             List<String> filterKeys = primaryKeys.stream().filter(s -> s.equalsIgnoreCase(table + "id") || s.equalsIgnoreCase(table + "_id") || s.equalsIgnoreCase("id")).collect(Collectors.toList());
             if (filterKeys.size() == 0) {
-                System.out.println("filterKeys#size():" + filterKeys.size());
+                System.out.println("[filterKeys#size()]" + filterKeys.size());
                 return TupleUtil.tuple(false, "");
             }
-            System.out.println("filterKeys#size():" + filterKeys.size());
+            System.out.println("[filterKeys#size()]" + filterKeys.size());
             if (filterKeys.size() == 1) {
                 return TupleUtil.tuple(true, filterKeys.get(0));
             } else {
@@ -61,7 +61,7 @@ public class UnitServiceUtil {
         Objects.requireNonNull(object);
         String stringCriteria = "";
         Object val = field.get(object);//得到此属性的值
-        if (UnitServiceUtil.isNumericTypes(field.getType())) {
+        if (DaoUtil.isNumericTypes(field.getType())) {
             stringCriteria = field.getName() + " = " + val;
         } else {
             if (field.getType().equals(Date.class)) {
@@ -82,7 +82,7 @@ public class UnitServiceUtil {
         Objects.requireNonNull(object);
         String stringCriteria = "";
         Object val = field.get(object);//得到此属性的值
-        if (UnitServiceUtil.isNumericTypes(field.getType())) {
+        if (DaoUtil.isNumericTypes(field.getType())) {
             stringCriteria = val.toString();
         } else {
             if (field.getType().equals(Date.class)) {
