@@ -1,0 +1,4 @@
+org\mybatis\utils\Component.class
+org\mybatis\utils\IUnitOfWork.class
+org\mybatis\utils\Dao.class
+org\mybatis\utils\IEntity.class
