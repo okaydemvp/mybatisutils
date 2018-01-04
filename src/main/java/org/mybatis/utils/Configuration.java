@@ -4,7 +4,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import java.util.Objects;
 
-public class Configuration {
+public final class Configuration {
 
     private static Configuration instance = null;
     private final String CONFIGLOCATION = "applicationContext.xml";

@@ -1,6 +1,6 @@
 package org.mybatis.utils;
 
-public class TupleUtil {
+public final class TupleUtil {
     public static <A, B> TwoTuple<A, B> tuple(A a, B b) {
         return new TwoTuple<>(a, b);
     }

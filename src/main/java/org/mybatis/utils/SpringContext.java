@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.util.Objects;
 
-public class SpringContext implements ApplicationContextAware {
+public final class SpringContext implements ApplicationContextAware {
 
     private ApplicationContext context;
     private volatile static SpringContext springContextUtil = null;

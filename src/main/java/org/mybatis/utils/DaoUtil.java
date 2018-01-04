@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DaoUtil {
+public final class DaoUtil {
     public static <T> TwoTuple<Boolean, String> hasPrimaryKey(T t) {
         Objects.requireNonNull(t);
         List<String> primaryKeys = new ArrayList<>();

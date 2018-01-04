@@ -1,31 +1,36 @@
 package org.mybatis.utils;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 public interface QueryServiceDao {
 
     @SelectProvider(type = QueryServiceDaoProvider.class, method = "find")
-    LinkedHashMap<String, Object> find(@Param("bean") Object bean);
+    List<LinkedHashMap<String, Object>> find(Object bean);
+
+    @SelectProvider(type = QueryServiceDaoProvider.class, method = "sqlQuery")
+    List<LinkedHashMap<String, Object>> sqlQuery(String sql);
 
     class QueryServiceDaoProvider {
-        public String find(Map<String, Object> map) throws IllegalAccessException {
-            return buildSql(map, Operation.FIND);
+        public String find(Object bean) throws IllegalAccessException {
+            return buildSql(bean, Operation.FIND);
         }
 
-        private String buildSql(Map<String, Object> map, Operation operation) throws IllegalAccessException {
-            String bean = "bean";
+        public String sqlQuery(String sql) {
+            return sql;
+        }
+
+        private String buildSql(Object bean, Operation operation) throws IllegalAccessException {
             System.out.println("[Operation]" + operation);
             StringBuilder stringCriterias = new StringBuilder();
             StringBuilder stringColumns = new StringBuilder();
             String keyCriteria = "";
-            String table = map.get(bean).getClass().getSimpleName();
-            Object obj = map.get(bean);
-            Class objClass = map.get(bean).getClass();
+            String table = bean.getClass().getSimpleName();
+            //Object obj = map.get(bean);
+            Class objClass = bean.getClass();
             /*String primaryKey = "";
             TwoTuple<Boolean, String> tuplePrimaryKey = DaoUtil.hasPrimaryKey(map.get(bean));
             if (tuplePrimaryKey.first) {
@@ -48,10 +53,10 @@ public interface QueryServiceDao {
                         stringColumns.append(",");
                 }
 
-                if (f.get(obj) != null) {
+                if (f.get(bean) != null) {
                     switch (operation) {
                         case FIND:
-                            stringCriterias.append(DaoUtil.buildCriteria(f, obj) + " AND ");
+                            stringCriterias.append(DaoUtil.buildCriteria(f, bean) + " AND ");
                             break;
                     }
 

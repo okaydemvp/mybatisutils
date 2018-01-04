@@ -2,7 +2,7 @@ package org.mybatis.utils;
 
 import java.util.Objects;
 
-public class MultiSourceHolder {
+public final class MultiSourceHolder {
     private static final ThreadLocal<String> THREAD_DATA_SOURCE = new ThreadLocal<>();
 
     public static String getDataSource() {
