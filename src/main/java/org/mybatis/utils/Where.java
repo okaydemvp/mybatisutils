@@ -1,11 +1,10 @@
 package org.mybatis.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Where {
     private final List<String> wheres = new ArrayList<>();
+    private final Map<String, Object> map = new HashMap<>();
     private final String LPARENTHESE = "(";
     private final String RPARENTHESE = ")";
     private final String OR = "OR";
@@ -25,6 +24,7 @@ public class Where {
         } else {
             wheres.add(String.format("%s = '%s' ", criteriaName, criteriaValue));
         }
+        map.put(criteriaName, criteriaValue);
         return this;
     }
 
@@ -49,6 +49,8 @@ public class Where {
         } else {
             wheres.add(String.format("%s BETWEEN '%s' AND '%s' ", criteriaName, criteriaValue.first, criteriaValue.second));
         }
+        map.put(String.format("%s1", criteriaName), criteriaValue.first);
+        map.put(String.format("%s2", criteriaName), criteriaValue.second);
         return this;
     }
 
@@ -74,5 +76,9 @@ public class Where {
         sql = sql.replaceAll("  AND \\)", RPARENTHESE);
         System.out.println("[where]" + sql);
         return sql;
+    }
+
+    protected Map buildMap() {
+        return this.map;
     }
 }

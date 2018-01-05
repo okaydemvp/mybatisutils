@@ -79,6 +79,13 @@ public final class QueryService<T> {
         return sqlQuery(bean, sql + stringParam.toString());
     }
 
+    public Optional<List<T>> sqlQuery(Class<T> bean, Map<String, Object> map, List<String> columnNames) throws IOException {
+        Objects.requireNonNull(map);
+        Objects.requireNonNull(columnNames);
+        String sql = String.format("SELECT %s FROM %s WHERE 1=1 ", String.join(",", columnNames), bean.getSimpleName());
+        return sqlQuery(bean, sql, map);
+    }
+
     public Optional<List<T>> sqlQuery(Class<T> bean, Where where) throws IOException {
         Objects.requireNonNull(where);
         String sql = String.format("SELECT * FROM %s WHERE %s", bean.getSimpleName(), where.build());
@@ -89,8 +96,14 @@ public final class QueryService<T> {
     public Optional<List<T>> sqlQuery(Class<T> bean, Where where, List<String> columnNames) throws IOException {
         Objects.requireNonNull(where);
         Objects.requireNonNull(columnNames);
-        String sql = String.format("SELECT %s FROM %s WHERE %s", String.join(",",columnNames),bean.getSimpleName(), where.build());
+        String sql = String.format("SELECT %s FROM %s WHERE %s", String.join(",", columnNames), bean.getSimpleName(), where.build());
         System.out.println("[sql]" + sql);
         return sqlQuery(bean, sql);
+    }
+
+    public Optional<List<T>> sqlQuery(Class<T> bean, String sql, Where where) throws IOException {
+        Objects.requireNonNull(sql);
+        Objects.requireNonNull(where);
+        return sqlQuery(bean, sql, where.buildMap());
     }
 }
