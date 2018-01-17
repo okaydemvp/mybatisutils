@@ -1,4 +1,6 @@
+D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\SpringUtil.java
 D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\Component.java
+D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\DataSourceConfig.java
 D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\MultiDataSource.java
 D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\Json.java
 D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\DateUtil.java
@@ -15,4 +17,3 @@ D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\Configuration.java
 D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\TupleUtil.java
 D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\QueryServiceDao.java
 D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\UnitService.java
-D:\IdeaProjects\mybatisutils\src\main\java\org\mybatis\utils\SpringBoot.java
