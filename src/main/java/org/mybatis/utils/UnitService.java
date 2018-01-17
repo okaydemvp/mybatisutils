@@ -2,7 +2,7 @@ package org.mybatis.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-@Repository
+@Component
 @Scope("prototype")
 public class UnitService implements AutoCloseable {
 

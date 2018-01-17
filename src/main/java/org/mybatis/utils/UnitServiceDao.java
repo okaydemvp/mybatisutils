@@ -1,10 +1,12 @@
 package org.mybatis.utils;
 
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
+@Component
 public interface UnitServiceDao {
     @UpdateProvider(type = UnitServiceDaoProvider.class, method = "update")
     <T> void update(@Param("bean") T bean);
@@ -88,7 +90,7 @@ public interface UnitServiceDao {
                     }
                     if (keyCriteria.isEmpty())
                         return "主键必须赋值";
-                    sql = String.format("%s %s SET %s WHERE %s;", operation.value(), table, stringCriterias.toString(), keyCriteria);
+                    sql = String.format("%s %s SET %s WHERE %s", operation.value(), table, stringCriterias.toString(), keyCriteria);
                     break;
                 case DELETE:
                     /*if (stringCriterias.length() > 0) {
@@ -97,7 +99,7 @@ public interface UnitServiceDao {
                     }*/
                     if (keyCriteria.isEmpty())
                         return "主键必须赋值";
-                    sql = String.format("%s FROM %s WHERE %s %s;", operation.value(), table, stringCriterias.toString(), keyCriteria);
+                    sql = String.format("%s FROM %s WHERE %s %s", operation.value(), table, stringCriterias.toString(), keyCriteria);
                     break;
                 case INSERT:
                     if (stringColumns.length() > 0) {
@@ -106,7 +108,7 @@ public interface UnitServiceDao {
                     if (stringCriterias.length() > 0) {
                         stringCriterias.deleteCharAt(stringCriterias.length() - 1);
                     }
-                    sql = String.format("%s INTO %s (%s) VALUES (%s);", operation.value(), table, stringColumns.toString(), stringCriterias.toString());
+                    sql = String.format("%s INTO %s (%s) VALUES (%s)", operation.value(), table, stringColumns.toString(), stringCriterias.toString());
                     break;
             }
 

@@ -1,11 +1,13 @@
 package org.mybatis.utils;
 
 import org.apache.ibatis.annotations.SelectProvider;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+@Component
 public interface QueryServiceDao {
 
     @SelectProvider(type = QueryServiceDaoProvider.class, method = "find")

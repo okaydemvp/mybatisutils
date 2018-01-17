@@ -1,7 +1,7 @@
 package org.mybatis.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,10 +9,20 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@Repository
+@Component
 public final class QueryService<T> {
     @Autowired
     private QueryServiceDao queryServiceDao;
+
+    public QueryService withDataSource(String dataSource) {
+        MultiSourceHolder.setDataSource(dataSource);
+        return this;
+    }
+
+    public QueryService withDataSource(Enum dataSource) {
+        MultiSourceHolder.setDataSource(dataSource.name());
+        return this;
+    }
 
     public Optional<T> find(T bean) throws IOException {
         Optional<List<T>> list = findList(bean);
@@ -24,6 +34,7 @@ public final class QueryService<T> {
 
     public Optional<List<T>> findList(T bean) throws IOException {
         List<T> list = Json.toObject(queryServiceDao.find(bean), bean.getClass());
+        MultiSourceHolder.clearDataSource();
         if (list.size() == 0) {
             return Optional.ofNullable(null);
         }
@@ -40,6 +51,7 @@ public final class QueryService<T> {
 
     public Optional<List<T>> sqlQuery(Class<T> bean, String sql) throws IOException {
         List<T> list = Json.toObject(queryServiceDao.sqlQuery(sql), bean);
+        MultiSourceHolder.clearDataSource();
         if (list.size() == 0) {
             return Optional.ofNullable(null);
         }
