@@ -1,3 +1,4 @@
+/*
 package org.mybatis.utils;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
@@ -72,3 +73,4 @@ public class DataSourceConfig {
     }
 
 }
+*/
